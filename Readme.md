@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Артур Аюпов](https://up.htmlacademy.ru/javascript/30/user/2411369).
-* Наставник: `Неизвестно`.
+* Наставник: [Вячеслав Николаев] (https://htmlacademy.ru/profile/slavka_piyavka).
 
 ---
 
