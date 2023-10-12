@@ -7,15 +7,14 @@ getStringLength('Hello world', 15);
 
 // Функция для проверки, является ли строка палиндромом
 function isPalindrome(string) {
-  let noSpaces = string.replaceAll(' ', '');
-  let lowerString = noSpaces.toLowerCase();
+  const FORMATTED_STRING = string.replaceAll(' ', '').toLowerCase();
   let newString = '';
 
-  for (let i = lowerString.length - 1; i >= 0; i--) {
-    newString += lowerString[i];
+  for (let i = FORMATTED_STRING.length - 1; i >= 0; i--) {
+    newString += FORMATTED_STRING[i];
   }
 
-  return newString === lowerString;
+  return newString === FORMATTED_STRING;
 }
 
 isPalindrome('Лёша на полке клопа нашёл ');
