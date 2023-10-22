@@ -1,3 +1,9 @@
+const PICTURE_COUNT = 25;
+const AVATAR_COUNT = 6;
+const LIKE_MIN_COUNT = 15;
+const LIKE_MAX_COUNT = 200;
+const COMMENT_COUNT = 20;
+
 const DESCRIPTIONS = [
   'Первое описание фотографии',
   'Второе описание фотографии',
@@ -11,16 +17,7 @@ const DESCRIPTIONS = [
   'Ииии последнее описание фотографии',
 ];
 
-const AVATARS = [
-  'img/avatar-1.svg',
-  'img/avatar-2.svg',
-  'img/avatar-3.svg',
-  'img/avatar-4.svg',
-  'img/avatar-5.svg',
-  'img/avatar-6.svg'
-];
-
-const MESSAGES = [
+const COMMENT_LINES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -42,65 +39,53 @@ const NAMES = [
   'Валерия',
 ];
 
-// Получаем случайное число из диапазона
-function getRandomValue (min, max) {
-  const LOWER = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
-  const UPPER = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
-  const RESULT = Math.random() * (UPPER - LOWER + 1) + LOWER;
+const getRandomInteger = (min, max) => {
+  const lower = Math.ceil(Math.min(min, max));
+  const upper = Math.floor(Math.max(min, max));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
 
-  return Math.floor(RESULT);
-}
+const getRandomArrayElement = (elements) =>
+  elements[getRandomInteger(0, elements.length - 1)];
 
-// Проверяем на оригинальность полученного случайного числа
-function createRandomValue (min, max) {
-  const PREVIOUS_VALUES = [];
+const createIdGenerator = () => {
+  let lastGeneratedId = 0;
 
-  return function () {
-    let currentValue = getRandomValue(min, max);
-
-    while (PREVIOUS_VALUES.includes(currentValue)) {
-      currentValue = getRandomValue(min, max);
-    }
-    PREVIOUS_VALUES.push(currentValue);
-
-    return currentValue;
+  return () => {
+    lastGeneratedId += 1;
+    return lastGeneratedId;
   };
-}
+};
 
-// Получаем случайное значение из массива
-function getRandomArrayElement (elements) {
-  return elements[getRandomValue(0, elements.length - 1)];
-}
+const generateCommentId = createIdGenerator();
 
-// Функция для генерации данных
-function getPhotoInfo () {
-  const PHOTO_INFO = {
-    id: createRandomValue (1, 25),
-    url: createRandomValue (1, 25),
-    description: getRandomArrayElement (DESCRIPTIONS),
-    likes: createRandomValue (15, 200),
+const createMessage = () => Array.from(
+  { length: getRandomInteger(1, 2) },
+  () => getRandomArrayElement(COMMENT_LINES)
+).join(' ');
 
-    getCommentsPhoto: function () {
-      const COMMENT_COUNT = createRandomValue (1, 30);
-      const COMMENTS = [];
+const createComment = () => ({
+  id: generateCommentId(),
+  avatar: `img/avatar-${getRandomInteger(1, AVATAR_COUNT)}.svg`,
+  message: createMessage(),
+  name: getRandomArrayElement(NAMES)
+});
 
-      for (let i = 0; i <= COMMENT_COUNT; i++) {
-        const COMMENT = {
-          id: createRandomValue (1, 10000),
-          avatar: getRandomArrayElement (AVATARS),
-          message: getRandomArrayElement (MESSAGES),
-          name: getRandomArrayElement (NAMES),
-        };
-        COMMENTS.push(COMMENT);
-      }
+const createPicture = (index) => ({
+  id: index,
+  url: `photos/${index}.jpg`,
+  description: getRandomArrayElement(DESCRIPTIONS),
+  likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),
+  comment: Array.from(
+    { length: getRandomInteger(0, COMMENT_COUNT) },
+    createComment
+  )
+});
 
-      return COMMENTS;
-    },
-  };
+const getPictures = () => Array.from(
+  { length: PICTURE_COUNT },
+  (_, pictureIndex) => createPicture(pictureIndex + 1)
+);
 
-  return PHOTO_INFO;
-}
-
-const PHOTO_GALLERY = Array.from({length: 25}, getPhotoInfo);
-
-console.log(PHOTO_GALLERY);
+getPictures();
