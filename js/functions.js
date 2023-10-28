@@ -20,7 +20,7 @@ function isPalindrome(string) {
 isPalindrome('Лёша на полке клопа нашёл ');
 
 // Функция для подсчета продолжительности встреч в рабочее время
-const convertTime = (allTime) => {
+const convertTimeToMinutes = (time) => {
   const TIME = allTime.split(':');
   const MINUTES = parseInt(TIME[0], 10) * 60 + parseInt(TIME[1], 10);
 
