@@ -27,9 +27,9 @@ const convertTimeToMinutes = (time) => {
 };
 
 const checkTime = (startTime, endTime, meetingStart, meetingDuration) => {
-  const startDayMinutes = convertTime(startTime);
-  const endDayMinutes = convertTime(endTime);
-  const startMeetingMinutes = convertTime(meetingStart);
+  const startDayMinutes = convertTimeToMinutes(startTime);
+  const endDayMinutes = convertTimeToMinutes(endTime);
+  const startMeetingMinutes = convertTimeToMinutes(meetingStart);
 
   return (startDayMinutes <= startMeetingMinutes) && ((startMeetingMinutes + meetingDuration) <= endDayMinutes);
 };
