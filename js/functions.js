@@ -21,10 +21,9 @@ isPalindrome('Лёша на полке клопа нашёл ');
 
 // Функция для подсчета продолжительности встреч в рабочее время
 const convertTimeToMinutes = (time) => {
-  const TIME = allTime.split(':');
-  const MINUTES = parseInt(TIME[0], 10) * 60 + parseInt(TIME[1], 10);
+  const [hours, minutes] = time.split(':').map((element) => Number(element));
 
-  return MINUTES;
+  return hours * 60 + minutes;
 };
 
 const checkTime = (startTime, endTime, meetingStart, meetingDuration) => {
