@@ -1,2 +1,2 @@
 import {getPictures} from './data.js';
-import {pituresList} from './thumbnail.js';
+import {picturesList} from './thumbnail.js';
