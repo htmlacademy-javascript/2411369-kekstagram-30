@@ -10,7 +10,7 @@ const picturesInfo = getPictures();
 const createListPictures = document.createDocumentFragment();
 
 picturesInfo.forEach(({url, description, likes, comments}) => {
-  const pictureElement = picturesTemplate.cloneNode(ture);
+  const pictureElement = picturesTemplate.cloneNode(true);
   pictureElement.querySelector('.picture__img').src = url;
   pictureElement.querySelector('.picture__img').alt = description;
   pictureElement.querySelector('.picture__likes').textContent = likes;
