@@ -114,7 +114,7 @@ const createSlider = ({min, max, step}) => {
 };
 
 const updateSlider = ({min, max, step}) => {
-  sliderElement.noUiSlider.updateUptions({
+  sliderElement.noUiSlider.updateOptions({
     range: {min, max},
     step,
     start: max,
