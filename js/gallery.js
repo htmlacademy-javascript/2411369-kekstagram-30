@@ -1,5 +1,5 @@
-import {renderThumbnails} from './thumbnail.js';
-import {showPicture} from './full-size-picture.js';
+import { renderThumbnails } from './thumbnail.js';
+import { showPicture } from './full-size-picture.js';
 
 const container = document.querySelector('.pictures');
 
@@ -7,7 +7,7 @@ const renderGallery = (pictures) => {
   container.addEventListener('click', (evt) => {
     const thumbnail = evt.target.closest('[data-thumbnail-id]');
 
-    if (! thumbnail) {
+    if (!thumbnail) {
       return;
     }
 
@@ -22,4 +22,4 @@ const renderGallery = (pictures) => {
   renderThumbnails(pictures, container);
 };
 
-export {renderGallery};
+export { renderGallery };

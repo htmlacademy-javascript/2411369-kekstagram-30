@@ -83,8 +83,7 @@ const showPicture = (pictureData) => {
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
 
-
-  comments = pictureData.comment;
+  comments = pictureData.comments;
   if (comments.length > 0) {
     renderComments();
   }
@@ -95,4 +94,4 @@ const showPicture = (pictureData) => {
 closePictureButtonElement.addEventListener('click', onClosePictureButtonClick);
 commentsLoaderElement.addEventListener('click', onCommentsLoaderClick);
 
-export {showPicture};
+export { showPicture };
