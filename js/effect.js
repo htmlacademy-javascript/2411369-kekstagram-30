@@ -149,4 +149,4 @@ const init = () => {
   effectsElement.addEventListener('change', onEffectsChange);
 };
 
-export {init, reset};
+export { init, reset };
