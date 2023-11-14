@@ -57,6 +57,7 @@ const hidePicture = () => {
   commentsCountShown = 0;
   bigPictureElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
+  document.body.removeEventListener('click', onBodyClick);
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
@@ -78,13 +79,19 @@ const renderPicture = ({url, description, likes}) => {
   bigPictureElement.querySelector('.social__caption').textContent = description;
 };
 
+function onBodyClick (evt) {
+  if (evt.target === document.querySelector('.overlay')) {
+    hidePicture();
+  }
+}
+
 const showPicture = (pictureData) => {
   bigPictureElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
+  document.body.addEventListener('click', onBodyClick);
   document.addEventListener('keydown', onDocumentKeydown);
 
-
-  comments = pictureData.comment;
+  comments = pictureData.comments;
   if (comments.length > 0) {
     renderComments();
   }
