@@ -32,4 +32,4 @@ const sendPicture = async (pictureData) => request(
   pictureData
 );
 
-export {loadPictures, sendPicture};
+export { loadPictures, sendPicture };
