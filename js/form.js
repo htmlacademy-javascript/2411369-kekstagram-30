@@ -107,7 +107,7 @@ const onFileInputChange = () => {
   if (file && isValidType(file)) {
     photoPreview.src = URL.createObjectURL(file);
     effectsPreviews.forEach((preview) => {
-      preview.style.backgroundImage = `ulr('${photoPreview.src}')`;
+      preview.style.backgroundImage = `url('${photoPreview.src}')`;
     });
   }
   showModal();
