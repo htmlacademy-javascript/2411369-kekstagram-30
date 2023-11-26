@@ -22,12 +22,7 @@ const getRandomIndex = (min, max) => {
   return Math.floor(result);
 };
 
-const comparePictures = (picture1, picture2) => {
-  const item1 = picture1.comments.length;
-  const item2 = picture2.comments.length;
-
-  return item2 - item1;
-};
+const comparePictures = (picture1, picture2) => picture2.comments.length - picture1.comments.length;
 
 const filterHandlers = {
   [FILTER_ENUMERATION.DEFAULT]: (pictures) => pictures,
@@ -45,33 +40,34 @@ const filterHandlers = {
   [FILTER_ENUMERATION.DISCUSSED]: (pictures) => pictures.slice().sort(comparePictures),
 };
 
-let currentFilter = FILTER_ENUMERATION.DEFAULT;
-
-const repaint = (evt, filter, pictures) => {
-  if (currentFilter !== filter) {
-    const filterData = filterHandlers[filter](pictures);
-    const thumbnail = document.querySelectorAll('.picture');
-    thumbnail.forEach((item) => item.remove());
-    renderGallery(filterData);
-    const currentActiveElement = filterForm.querySelector('.img-filters__button--active');
-    currentActiveElement.classList.remove('img-filters__button--active');
-    evt.target.classList.add('img-filters__button--active');
-    currentFilter = filter;
-  }
+const repaintGallery = (filter, pictures) => {
+  const filterData = filterHandlers[filter](pictures);
+  const thumbnail = document.querySelectorAll('.picture');
+  thumbnail.forEach((item) => item.remove());
+  renderGallery(filterData);
 };
 
-const debouncedRepaint = debounce(repaint);
+const setActiveFilter = (evt) => {
+  const currentActiveElement = filterForm.querySelector('.img-filters__button--active');
+  currentActiveElement.classList.remove('img-filters__button--active');
+  evt.target.classList.add('img-filters__button--active');
+};
+
+const debouncedRepaint = debounce(repaintGallery);
 
 const initFilter = (pictures) => {
   filterElement.classList.remove('img-filters--inactive');
   defaultButon.addEventListener('click', (evt) => {
-    debouncedRepaint(evt, FILTER_ENUMERATION.DEFAULT, pictures);
+    setActiveFilter(evt);
+    debouncedRepaint(FILTER_ENUMERATION.DEFAULT, pictures);
   });
   randomButon.addEventListener('click', (evt) => {
-    debouncedRepaint(evt, FILTER_ENUMERATION.RANDOM, pictures);
+    setActiveFilter(evt);
+    debouncedRepaint(FILTER_ENUMERATION.RANDOM, pictures);
   });
   discussedButon.addEventListener('click', (evt) => {
-    debouncedRepaint(evt, FILTER_ENUMERATION.DISCUSSED, pictures);
+    setActiveFilter(evt);
+    debouncedRepaint(FILTER_ENUMERATION.DISCUSSED, pictures);
   });
 };
 

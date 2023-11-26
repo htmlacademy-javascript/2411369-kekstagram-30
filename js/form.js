@@ -4,12 +4,21 @@ import { sendPicture } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
 
 const MAX_HASHTAG_COUNT = 5;
+const MAX_HASHTAG_LENGTH = 20;
+const MAX_COMMENT_LENGTH = 140;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const ErrorText = {
   INVALID_COUNT: `Максимум ${MAX_HASHTAG_COUNT} хэштегов`,
   NOT_UNIQUE: 'Хэштеги должны быть уникальными',
-  INVALID_PATTERN: 'Неправильный хэштег',
+  INVALID_LENGTH: `У хэштега должно быть не более ${MAX_HASHTAG_LENGTH} символов`,
+  INVALID_PATTERN: [
+    'Хэштег должен начинаться с символа "#"',
+    'Хэштег не должен состоять только из символа "#"',
+    'Хэштег содержит запрещенные символы'
+  ],
+  INVALID_LENGTH_COMMENT: `Длина комментария больше ${MAX_COMMENT_LENGTH} символов`,
 };
 
 const SubmitButtonCaption = {
@@ -73,14 +82,17 @@ const normalizeTags = (tagString) => tagString
   .split(' ')
   .filter((tag) => Boolean(tag.length));
 
+const startsWithHash = (value) => normalizeTags(value).every((tag) => tag.startsWith('#'));
+const hasValidPattern = (value) => normalizeTags(value).every((tag) => tag !== '#');
 const hasValidTags = (value) => normalizeTags(value).every((tag) => VALID_SYMBOLS.test(tag));
-
-const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUNT;
-
+const hasValidLength = (value) => normalizeTags(value).every((element) => element.length <= MAX_HASHTAG_LENGTH);
 const hasUniqueTags = (value) => {
   const lowerCaseTags = normalizeTags(value).map((tag) => tag.toLowerCase());
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
 };
+const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUNT;
+
+const hasValidComment = (value) => value.length <= MAX_COMMENT_LENGTH;
 
 function onDocumentKeydown(evt) {
   if (evt.key === 'Escape' && !isTextFieldFocused() && !isErrorMessageExists()) {
@@ -95,7 +107,7 @@ const onFileInputChange = () => {
   if (file && isValidType(file)) {
     photoPreview.src = URL.createObjectURL(file);
     effectsPreviews.forEach((preview) => {
-      preview.style.backgroundImage = `ulr('${photoPreview.src}')`;
+      preview.style.backgroundImage = `url('${photoPreview.src}')`;
     });
   }
   showModal();
@@ -127,27 +139,13 @@ const onFormSubmit = (evt) => {
   sendForm(evt.target);
 };
 
-pristine.addValidator(
-  hashtagField,
-  hasValidCount,
-  ErrorText.INVALID_COUNT,
-  3,
-  true
-);
-pristine.addValidator(
-  hashtagField,
-  hasUniqueTags,
-  ErrorText.NOT_UNIQUE,
-  2,
-  true
-);
-pristine.addValidator(
-  hashtagField,
-  hasValidTags,
-  ErrorText.INVALID_PATTERN,
-  1,
-  true
-);
+pristine.addValidator(hashtagField, hasValidTags, ErrorText.INVALID_PATTERN[2], 1, true);
+pristine.addValidator(hashtagField, startsWithHash, ErrorText.INVALID_PATTERN[0], 2, true);
+pristine.addValidator(hashtagField, hasValidPattern, ErrorText.INVALID_PATTERN[1], 3, true);
+pristine.addValidator(hashtagField, hasValidLength, ErrorText.INVALID_LENGTH, 4, true);
+pristine.addValidator(hashtagField, hasUniqueTags, ErrorText.NOT_UNIQUE, 5, true);
+pristine.addValidator(hashtagField, hasValidCount, ErrorText.INVALID_COUNT, 6, true);
+pristine.addValidator(commentField, hasValidComment, ErrorText.INVALID_LENGTH_COMMENT, 7, true);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);

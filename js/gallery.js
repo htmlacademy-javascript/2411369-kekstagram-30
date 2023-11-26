@@ -4,6 +4,10 @@ import { showPicture } from './full-size-picture.js';
 const container = document.querySelector('.pictures');
 
 const renderGallery = (pictures) => {
+  renderThumbnails(pictures, container);
+};
+
+const setGalleryListener = (pictures) => {
   container.addEventListener('click', (evt) => {
     const thumbnail = evt.target.closest('[data-thumbnail-id]');
 
@@ -18,8 +22,6 @@ const renderGallery = (pictures) => {
 
     showPicture(pictureData);
   });
-
-  renderThumbnails(pictures, container);
 };
 
-export { renderGallery };
+export { renderGallery, setGalleryListener };
